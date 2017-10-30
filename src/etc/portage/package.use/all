@@ -23,12 +23,14 @@ app-text/poppler                cairo
 # [xf86-video-ati[glamor] requires mesa[egl,gbm]]
 # [xf86-video-vmware requires mesa[xa]]
 # [xf86-video-virtualbox[dri] conflicts w/ mprotect]
-media-libs/mesa                 xa gbm -llvm
+# [skunkworks] Add Proper Radeon support. This sucks but is usefully in my case.
+
+media-libs/mesa                 xa gbm llvm glamor gallium gles2 gles1 egl
 x11-libs/libdrm                 libkms
 x11-drivers/xf86-video-virtualbox -dri
 app-emulation/open-vm-tools     -X
 app-emulation/open-vm-tools-kmod vmhgfs
-x11-base/xorg-drivers           -video_cards_nv
+x11-base/xorg-drivers           -video_cards_nv -input_devices-vmmouse -vmmouse
 
 # Networking, including SSL/TLS
 net-libs/libetpan               gnutls
@@ -41,15 +43,17 @@ net-libs/glib-networking        -gnome
 
 # Multimedia
 # [ffmpeg/libav: encode-only flags: mp3 aac faac fdk theora vorbis x264 xvid]
+# [skunkworks] Enable ffmpeg and network. bad? needed for mpv/youtube-dl
 virtual/ffmpeg                  -X -encode -truetype
-media-video/libav               -X -encode -truetype -alsa -network -ssl  -hardcoded-tables  -v4l
+#media-video/libav               -X -encode -truetype -alsa -network -ssl  -hardcoded-tables  -v4l
+media-video/ffmpeg		-X aac alsa bzip2 encode gnutls gpl -hardcoded-tables mp3 network vdpau vorbis x264 
 media-sound/sox                 encode
 media-sound/vorbis-tools        speex
 media-plugins/gst-plugins-meta  dv lame theora vpx x264 xvid  a52 dts dvd libass mms mpeg  ffmpeg
-www-client/firefox              -alsa gstreamer  system-jpeg system-cairo system-sqlite system-icu  -wifi
+www-client/firefox              -alsa gstreamer  system-jpeg system-cairo system-sqlite system-icu  -wifi bindist
 media-libs/libass               -harfbuzz
 media-gfx/graphicsmagick        -truetype
-
+media-video/mpv 		X alsa cli egl dvd openal xinerama xv -lua 
 # Unnecessary functionality
 sys-libs/ncurses                minimal
 media-libs/libsndfile           minimal
@@ -89,7 +93,8 @@ sys-devel/binutils              cxx
 www-client/firefox              custom-cflags custom-optimization
 media-video/libav               custom-cflags cpudetection 3dnow 3dnowext ssse3 avx
 sys-fs/udev                     gudev
-gnome-base/librsvg              tools
+gnome-base/librsvg              -tools
+app-crypt/pinentry 		gnome-keyring
 dev-util/strace                 aio
 app-portage/eix                 strong-security
 dev-db/sqlite                   secure-delete
@@ -102,3 +107,8 @@ net-wireless/wpa_supplicant     ap p2p
 # Internationalization
 app-i18n/uim                    -linguas_*
 media-fonts/terminus-font       quote ru-dv ru-i
+
+
+#radeon
+x11-base/xorg-server glamor 
+media-libs/libsdl2  glamor 

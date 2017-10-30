@@ -5,7 +5,11 @@ dev-libs/elfutils
 sys-apps/man-db
 
 # Prefer media-video/libav + media-libs/libpostproc
-media-video/ffmpeg
+# media-video/ffmpeg  
 
 # Prefer media-plugins/gst-plugins-cdio
 media-plugins/gst-plugins-cdparanoia
+
+
+# [skunkworks] Ged rid of vmmouse it causes issues
+x11-drivers/xf86-input-vmmouse

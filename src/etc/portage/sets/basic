@@ -29,7 +29,7 @@ net-fs/autofs
 # System / security utilities
 sys-apps/gradm
 app-shells/dash
-app-admin/eselect-sh
+app-eselect/eselect-sh
 app-admin/metalog
 app-admin/sudo
 app-misc/hatools
@@ -53,8 +53,6 @@ net-firewall/iptables
 sys-apps/ethtool
 net-wireless/crda
 net-wireless/rfkill
-net-wireless/aircrack-ng
-net-wireless/reaver
 net-misc/networkmanager
 net-misc/networkmanager-pptp
 net-misc/networkmanager-openvpn
@@ -104,6 +102,6 @@ games-util/joystick
 app-misc/joy2key
 net-print/ink
 
-# Virtualization
-app-emulation/open-vm-tools
-app-emulation/virtualbox-guest-additions
+# Virtualization [skunkworks] getting rid of this, do we need vmware? it is bad and leaks IP's
+#app-emulation/open-vm-tools
+#app-emulation/virtualbox-guest-additions

@@ -50,7 +50,8 @@ x11-misc/xcompmgr
 x11-misc/wmctrl
 x11-misc/stalonetray
 lxde-base/lxpanel
-lxde-base/lxshortcut
+#lxde-base/lxshortcut
+x11-misc/spacefm
 lxde-base/lxtask
 
 # Extended configuration

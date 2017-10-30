@@ -4,7 +4,7 @@
 sys-apps/microcode-data
 
 # GPUs
-x11-drivers/radeon-ucode
+sys-firmware/radeon-ucode
 
 # Wi-Fi
 sys-firmware/b43-firmware
