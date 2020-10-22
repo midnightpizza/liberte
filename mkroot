@@ -18,8 +18,8 @@ LIVECD=$1
 
 # MIRROR=http://mirrors.kernel.org/gentoo
 MIRROR=http://distfiles.gentoo.org
-stage3base=${MIRROR}/releases/x86/autobuilds
-portage=${MIRROR}/snapshots/portage-latest.tar.bz2
+stage3base=${MIRROR}/releases/amd64/autobuilds
+portage=${MIRROR}/snapshots/portage-latest.tar.xz
 
 # GPG keys used at bulid-time
 gpg_keys=`sed '/^#/d; /^$/d; s/ //g' ${FROM}/conf/pubkeys`
@@ -54,26 +54,29 @@ fi
 rm ${LIVECD}/mirror/fs-test
 
 
-# latest-stage3-i686.txt contains YYYYMMDD/stage3-i686-YYYYMMDD.tar.bz2
+# latest-stage3-i686.txt contains YYYYMMDD/stage3-i686-YYYYMMDD.tar.xz
 sinfo "Fetching latest-stage3.txt"
-wget -N -nv -P ${LIVECD}/mirror/stage3 ${stage3base}/latest-stage3-i686.txt
-#stage3=`grep stage3-i686 ${LIVECD}/mirror/stage3/latest-stage3-i686.txt`
-stage3=`grep -Po "\d.*?bz2" ${LIVECD}/mirror/stage3/latest-stage3-i686.txt`
+echo ${LIVECD}/mirror/stage3 ${stage3base}/latest-stage3.txt
+wget -N -nv -P ${LIVECD}/mirror/stage3 ${stage3base}/latest-stage3.txt
+stage3=`grep stage3-amd64-hardened+nomultilib ${LIVECD}/mirror/stage3/latest-stage3.txt`
+#stage3=`grep -Po "\d.*?.tar.xz" ${LIVECD}/mirror/stage3/latest-stage3.txt`
 stage3file=`basename ${stage3}`
 
 # If a new stage3 is available, remove old mirrors
 if [ ! -e ${LIVECD}/mirror/stage3/${stage3file} ]; then
-    rm -f ${LIVECD}/mirror/stage3/stage3-i686-*.tar.bz2*
+    rm -f ${LIVECD}/mirror/stage3/stage3*.tar.xz*
 fi
 
 
 sinfo "Downloading ${stage3file}"
+echo Saving to... ${LIVECD}
+
 wget -c -nv -P ${LIVECD}/mirror/stage3  \
-    ${stage3base}/${stage3}.DIGESTS.asc \
-    ${stage3base}/${stage3}.CONTENTS    \
+    ${stage3base}/current-stage3-amd64/hardened/${stage3file}.DIGESTS.asc \
+    ${stage3base}/current-stage3-amd64/hardened/${stage3file}.CONTENTS.gz    \
     ${stage3base}/${stage3}
 
-sinfo "Downloading portage-latest.tar.bz2"
+sinfo "Downloading portage-latest.tar.xz"
 wget -N -nv -P ${LIVECD}/mirror/portage ${portage}.gpgsig ${portage}
 
 
@@ -110,8 +113,8 @@ sinfo "Verifying stage3 and portage snapshot PGP signatures"
 gpg -q --homedir ${LIVECD}/mirror/gnupg --trust-model always --keyring gentoo.gpg \
     --verify ${LIVECD}/mirror/stage3/${stage3file}.DIGESTS.asc
 gpg -q --homedir ${LIVECD}/mirror/gnupg --trust-model always --keyring gentoo.gpg \
-    --verify ${LIVECD}/mirror/portage/portage-latest.tar.bz2.gpgsig \
-             ${LIVECD}/mirror/portage/portage-latest.tar.bz2
+    --verify ${LIVECD}/mirror/portage/portage-latest.tar.xz.gpgsig \
+             ${LIVECD}/mirror/portage/portage-latest.tar.xz
 
 
 sinfo "Verifying stage3 SHA512 digests"
@@ -130,7 +133,7 @@ tar -xpSjf ${LIVECD}/mirror/stage3/${stage3file} -C ${LIVECD}/src --exclude './d
 
 
 sinfo "Extracting portage to ${LIVECD}/src/usr"
-tar -xpSjf ${LIVECD}/mirror/portage/portage-latest.tar.bz2 -C ${LIVECD}/src/usr
+tar -xpSjf ${LIVECD}/mirror/portage/portage-latest.tar.xz -C ${LIVECD}/src/usr
 
 
 sinfo "Done."
